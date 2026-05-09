@@ -1,19 +1,26 @@
-import { supabase } from './supabase.js'
+import { supabase } from './supabase.js';
 
 export default async function handler(req, res) {
-  const body = req.body
+  try {
+    if (req.method !== 'POST') {
+      return res.status(405).json({ error: 'Method not allowed' });
+    }
 
-  const { data, error } = await supabase
-    .from('transactions')
-    .insert({
-      title: body.title,
-      amount: body.amount,
-      category: body.category,
-      date: body.date
-    })
-    .select()
+    // Parse JSON body correctly for Vercel
+    const body = await req.json();
 
-  if (error) return res.status(500).json({ error: error.message })
+    const { amount, category, type, date, notes } = body;
 
-  return res.status(200).json({ transaction: data })
+    // Insert into the correct table
+    const { data, error } = await supabase
+      .from('transactions')
+      .insert([{ amount, category, type, date, notes }]);
+
+    if (error) throw error;
+
+    res.status(200).json({ success: true, data });
+  } catch (err) {
+    console.error('Add transaction error:', err);
+    res.status(500).json({ error: err.message });
+  }
 }
