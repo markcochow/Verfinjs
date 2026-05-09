@@ -1,8 +1,5 @@
 {
   "name": "verfin",
   "version": "1.0.0",
-  "type": "module",
-  "scripts": {
-    "start": "node api/supabase.js"
-  }
+  "output": "static"
 }
