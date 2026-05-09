@@ -1,5 +1,7 @@
 {
-  "name": "verfin",
+  "name": "verfin1",
   "version": "1.0.0",
+  "private": true,
+  "type": "module",
   "output": "static"
 }
